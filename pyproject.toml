@@ -1,0 +1,37 @@
+[project]
+name = "house-price-prediction-mlops"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "nafi-rahman",email = "nafirahman16@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = "MIT"
+dependencies = [
+    "pandas (>=2.0,<2.2)",
+    "scikit-learn (>=1.7.1,<2.0.0)",
+    "numpy (>=2.3.2,<3.0.0)",
+    "pyyaml (>=6.0.2,<7.0.0)",
+    "dvc (>=3.61.0,<4.0.0)",
+    "mlflow (>=3.2.0,<4.0.0)",
+    "prefect (>=3.4.11,<4.0.0)",
+    "great-expectations (>=1.5.7,<2.0.0)",
+    "evidently (>=0.7.12,<0.8.0)",
+    "fastapi (>=0.116.1,<0.117.0)",
+    "uvicorn (>=0.35.0,<0.36.0)",
+    "streamlit (>=1.48.0,<2.0.0)",
+    "python-dotenv (>=1.1.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.4.1"
+flake8 = "^7.3.0"
+black = "^25.1.0"
+isort = "^6.0.1"
+

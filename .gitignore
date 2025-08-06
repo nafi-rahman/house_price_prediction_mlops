@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.env
+mlruns/
+data/*.dvc
+data/raw/
+data/processed/
+models/
+*.sqlite
+*.db
+# poetry.lock
+venv/
+.dvc/
+great_expectations/
+*.log
