@@ -4,11 +4,11 @@ An end-to-end MLOps project for predicting house prices in King County, USA. Thi
 
 ### 📖 Table of Contents
 
-- [Core Technologies]
-- [Master Plan]
-- [Getting Started]
-- [Project Structure]
-- [What's Next]
+- Core Technologies
+- Master Plan
+- Getting Started
+- Project Structure
+- What's Next
 
 ### 🛠️ Core Technologies
 
@@ -31,40 +31,39 @@ This phase established a professional and scalable project structure.
 - **Configuration Management:** Implemented a configuration file (`configs/config.yaml`) to store all hyperparameters, file paths, and environment settings.
 - **Version Control:** Initialized a Git repository and created a `.gitignore` file to exclude large files and virtual environments.
 
-### Phase 1: Data Versioning, Validation & Preprocessing (DVC + Great Expectations) (✅ In Progress)
+### Phase 1: Data Versioning, Validation & Preprocessing (DVC + Great Expectations) (✅ Complete)
 
 This phase establishes the data foundation of your pipeline, focusing on quality and traceability.
 
-- **Done:** The raw `kc_house_data.csv` dataset has been versioned using **DVC**. A robust data quality gate has been implemented with **Great Expectations 1.x** to validate the raw data's schema and content. Our Great Expectations project is configured, and an `ExpectationSuite` named `kc_house_raw` has been defined. The `src/data_loader.py` script now uses this suite to validate the data before any further processing.
-- **Remaining:** The next step is to develop a preprocessing script (`src/preprocess_data.py`) to handle cleaning, feature engineering, and encoding. We will then version the processed data using DVC.
+- **Done:** The raw `kc_house_data.csv` dataset has been versioned using **DVC**. A robust data quality gate has been implemented with **Great Expectations 1.x** to validate the raw data's schema and content. An `ExpectationSuite` named `kc_house_raw` has been defined. The `src/data_loader.py` script now uses this suite to validate the data.
+- **Done:** A preprocessing script (`src/preprocess_data.py`) has been developed and executed. This script cleans the data, engineers new features, and encodes categorical variables. The processed data is now available at `data/processed/kc_house_data_processed.csv`.
+- **Remaining:** The final step for this phase is to version the processed data using DVC.
 
-### Phase 2: Model Training & Advanced Experiment Tracking (MLflow + Optuna) (⏳ Upcoming)
+### Phase 2: Model Training & Advanced Experiment Tracking (MLflow + Optuna) (✅ In Progress)
 
-- Refine the training script (`src/train.py`) to use **Optuna** for sophisticated hyperparameter optimization.
-- Integrate **MLflow** into the training script to log every run, including parameters, metrics (RMSE, MAE, R²), and model artifacts.
-- Programmatically register the champion model to the MLflow Model Registry.
+- We are currently preparing to train a regression model on the preprocessed data.
+- This phase will use **Optuna** for sophisticated hyperparameter optimization.
+- We will integrate **MLflow** into the training script to log every run, including parameters, metrics, and model artifacts.
+- The best-performing model will be programmatically registered to the MLflow Model Registry.
 
 ### Phase 3: Orchestration & Workflow Automation (Prefect) (⏳ Upcoming)
 
 - Use **Prefect** to define a workflow that orchestrates the entire pipeline.
-- Implement a feedback loop by configuring a trigger for the Prefect flow, such as a scheduled nightly run.
-- Add robust error handling to automatically retry tasks on failure.
+- Implement a feedback loop by configuring a trigger for the Prefect flow.
 
 ### Phase 4: Model Serving & User Interface (FastAPI + Streamlit) (⏳ Upcoming)
 
 - Develop a Python script (`src/serve.py`) using **FastAPI** to create a REST API endpoint.
-- Build a simple **Streamlit** application to serve as a front-end, making requests to the FastAPI endpoint.
-- Deploy the Streamlit UI and the FastAPI backend to a free PaaS tier.
+- Build a simple **Streamlit** application to serve as a front-end.
 
 ### Phase 5: Containerization & CI/CD (GitHub Actions + Docker) (⏳ Upcoming)
 
-- Create two multi-stage **Dockerfiles**: one for the training pipeline and a lightweight image for the FastAPI serving application.
-- Define a **GitHub Actions** workflow triggered on a push to the main branch to automate the CI/CD pipeline.
+- Create two multi-stage **Dockerfiles** for the training pipeline and serving application.
+- Define a **GitHub Actions** workflow to automate the CI/CD pipeline.
 
 ### Phase 6: Monitoring & Model Governance (Evidently/DVC-Live + MLflow) (⏳ Upcoming)
 
 - Use **Evidently** to monitor for data and model drift.
-- Configure a scheduled job to compare production data to training data and generate a drift report.
 - Document a rollback procedure using the MLflow Model Registry.
 
 ### ▶️ Getting Started
@@ -128,7 +127,14 @@ Follow these steps exactly to set up and run the project from a fresh clone.
     
     ```
     
-    **Expected Output:** You should see a message indicating "Data validation successful!" followed by the head of the DataFrame, confirming that our data quality gate is working as intended.
+4. **Run the data preprocessing script.** This script will load the validated data, clean it, engineer new features, and save the processed data.
+    
+    ```
+    python src/preprocess_data.py
+    
+    ```
+    
+    **Expected Output:** You should see messages confirming that data validation and preprocessing were successful, followed by the head of the processed DataFrame.
     
 
 ### 📂 Project Structure
@@ -140,7 +146,8 @@ Follow these steps exactly to set up and run the project from a fresh clone.
 ├── data/
 │   ├── raw/
 │   │   └── kc_house_data.csv   # Raw dataset (DVC-tracked)
-│   └── processed/              # Processed data will be stored here
+│   └── processed/
+│       └── kc_house_data_processed.csv # Processed dataset
 ├── great_expectations/         # Great Expectations project folder
 │   ├── expectations/
 │   │   └── kc_house_raw.json   # Our saved expectation suite
@@ -150,7 +157,8 @@ Follow these steps exactly to set up and run the project from a fresh clone.
 ├── scripts/
 │   └── create_expectation_suite.py # Script to define our data quality rules
 ├── src/
-│   └── data_loader.py          # Loads and validates raw data
+│   ├── data_loader.py          # Loads and validates raw data
+│   └── preprocess_data.py      # Cleans, engineers features, and saves processed data
 ├── .dvcignore
 ├── .gitignore
 ├── pyproject.toml
@@ -160,4 +168,4 @@ Follow these steps exactly to set up and run the project from a fresh clone.
 
 ### 🚀 What's Next
 
-With data validation successfully implemented, we are now ready to begin the next task in Phase 1: **Data Preprocessing**. We will create `src/preprocess_data.py` to prepare our validated dataset for the model training phase.
+With data validation and preprocessing complete, we are now officially ready to begin **Phase 2: Model Training & Advanced Experiment Tracking**. This next step will involve using the processed data to train a model and systematically track our experiments with MLflow.
