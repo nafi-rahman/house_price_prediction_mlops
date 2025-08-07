@@ -4,11 +4,11 @@ An end-to-end MLOps project for predicting house prices in King County, USA. Thi
 
 ### 📖 Table of Contents
 
-- [Core Technologies](https://www.google.com/search?q=%23-core-technologies)
-- [Master Plan](https://www.google.com/search?q=%23-master-plan)
-- [Getting Started](https://www.google.com/search?q=%23-getting-started)
-- [Project Structure](https://www.google.com/search?q=%23-project-structure)
-- [What's Next](https://www.google.com/search?q=%23-whats-next)
+- [Core Technologies]
+- [Master Plan]
+- [Getting Started]
+- [Project Structure]
+- [What's Next]
 
 ### 🛠️ Core Technologies
 
