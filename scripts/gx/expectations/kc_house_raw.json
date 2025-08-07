@@ -1,0 +1,106 @@
+{
+  "expectations": [
+    {
+      "id": "c7f12810-1ce6-4cd5-ad5a-ba7f78fc101f",
+      "kwargs": {
+        "column_list": [
+          "id",
+          "date",
+          "price",
+          "bedrooms",
+          "bathrooms",
+          "sqft_living",
+          "sqft_lot",
+          "floors",
+          "waterfront",
+          "view",
+          "condition",
+          "grade",
+          "sqft_above",
+          "sqft_basement",
+          "yr_built",
+          "yr_renovated",
+          "zipcode",
+          "lat",
+          "long",
+          "sqft_living15",
+          "sqft_lot15"
+        ]
+      },
+      "meta": {},
+      "type": "expect_table_columns_to_match_ordered_list"
+    },
+    {
+      "id": "1b6ef6a6-38c4-4e54-b28f-7a5668168009",
+      "kwargs": {
+        "column": "price"
+      },
+      "meta": {},
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "6343fe2f-1e64-40a7-a23c-ae6e9c6319cf",
+      "kwargs": {
+        "column": "bedrooms"
+      },
+      "meta": {},
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "83c8e672-598c-44d3-b3fc-3beb9e8e667e",
+      "kwargs": {
+        "column": "bathrooms"
+      },
+      "meta": {},
+      "type": "expect_column_values_to_not_be_null"
+    },
+    {
+      "id": "cab110df-290d-4ebc-b1df-c01ad5a8e1c0",
+      "kwargs": {
+        "column": "price",
+        "max_value": 10000000.0,
+        "min_value": 10000.0
+      },
+      "meta": {},
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "e2dafb83-66f2-46d1-913e-ec3ed3a8c95c",
+      "kwargs": {
+        "column": "bedrooms",
+        "max_value": 33.0,
+        "min_value": 0.0
+      },
+      "meta": {},
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "b8b0df81-77c5-4b0d-8823-dd659f119aad",
+      "kwargs": {
+        "column": "bathrooms",
+        "max_value": 10.0,
+        "min_value": 0.0
+      },
+      "meta": {},
+      "type": "expect_column_values_to_be_between"
+    },
+    {
+      "id": "195a0849-91aa-4afe-bcb9-fa785480f9b8",
+      "kwargs": {
+        "column": "waterfront",
+        "value_set": [
+          0,
+          1
+        ]
+      },
+      "meta": {},
+      "type": "expect_column_values_to_be_in_set"
+    }
+  ],
+  "id": "c47e4321-e6f0-4d36-a297-1710748776ac",
+  "meta": {
+    "great_expectations_version": "1.5.7"
+  },
+  "name": "kc_house_raw",
+  "notes": null
+}

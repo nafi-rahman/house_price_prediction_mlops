@@ -1,0 +1,22 @@
+{
+  "data": {
+    "asset": {
+      "id": "5236e4cd-9453-4ff8-a872-d4f49b76eb40",
+      "name": "kc_house_data"
+    },
+    "batch_definition": {
+      "id": "5729d943-fe99-4009-a321-521f4e82580d",
+      "name": "whole_file"
+    },
+    "datasource": {
+      "id": "19542406-2467-40e4-ac20-c7454a353115",
+      "name": "kc_house_datasource"
+    }
+  },
+  "id": "4eb9923e-304e-41e8-b8ca-f76cce48b6bd",
+  "name": "kc_house_validation",
+  "suite": {
+    "id": "c47e4321-e6f0-4d36-a297-1710748776ac",
+    "name": "kc_house_raw"
+  }
+}

@@ -5,13 +5,18 @@ __pycache__/
 .env
 mlruns/
 data/*.dvc
-data/raw/
+
 data/processed/
 models/
 *.sqlite
 *.db
 # poetry.lock
 venv/
-.dvc/
+
 great_expectations/
 *.log
+# Ignore the *actual* CSV file (DVC will track the pointer .dvc file)
+/data/raw/*.csv
+
+# DO NOT ignore the .dvc file
+!/data/raw/*.csv.dvc
