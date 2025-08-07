@@ -1,25 +1,12 @@
-# configs/config.yaml
-data:
-  raw_data_path: "data/raw/house_prices.csv"
-  processed_data_path: "data/processed/features.parquet"
-  target_column: "SalePrice"
+project_name: "mlops_house_price_prediction"
 
-model:
-  name: "GradientBoostingRegressor"
-  params:
-    n_estimators: 100
-    learning_rate: 0.1
-    max_depth: 3
+data_paths:
+  raw_data_path: "data/raw/kc_house_data.csv"
+  processed_data_path: "data/processed/kc_house_data_processed.csv"
 
-mlflow:
-  tracking_uri: "file:./mlruns" # Local MLflow tracking server
+target_column: "price"
 
 great_expectations:
-  base_path: "great_expectations"
-
-dvc:
-  cache_dir: ".dvc/cache"
-
-server:
-  host: "0.0.0.0"
-  port: 8000
+  suite_name: "kc_house_raw"
+  datasource_name: "kc_house_datasource"
+  data_asset_name: "kc_house_data"

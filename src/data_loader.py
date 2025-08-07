@@ -1,81 +1,88 @@
-# src/data_loader.py
-
-import great_expectations as gx
+#!/usr/bin/env python3
+"""
+This script loads the raw data, validates it using Great Expectations,
+and returns a pandas DataFrame if the validation is successful.
+"""
+import pathlib
+import sys
 import pandas as pd
-import os
-import yaml
+import great_expectations as gx
 
-# Load configuration
-with open("configs/config.yaml", "r") as f:
-    config = yaml.safe_load(f)
-
-RAW_DATA_PATH = config["data"]["raw_data_path"]
-EXPECTATION_SUITE_NAME = config["great_expectations"]["expectation_suite_name"]
-DATASOURCE_NAME = config["great_expectations"]["datasource_name"] # Added this to config.yaml
-DATA_ASSET_NAME = config["great_expectations"]["data_asset_name"] # Added this to config.yaml
-
-def load_and_validate_data(data_path: str = RAW_DATA_PATH, suite_name: str = EXPECTATION_SUITE_NAME) -> pd.DataFrame:
+def load_data(
+    data_file_path: pathlib.Path,
+    gx_suite_name: str,
+    gx_datasource_name: str,
+    gx_data_asset_name: str,
+) -> pd.DataFrame:
     """
-    Loads raw data and validates it using Great Expectations.
+    Loads data from a specified path and validates it using a Great Expectations suite.
 
     Args:
-        data_path (str): Path to the raw CSV data file.
-        suite_name (str): Name of the Great Expectations suite to use for validation.
+        data_file_path: The path to the data file.
+        gx_suite_name: The name of the Great Expectations suite to use for validation.
+        gx_datasource_name: The name of the Great Expectations datasource.
+        gx_data_asset_name: The name of the Great Expectations data asset.
 
     Returns:
-        pd.DataFrame: The loaded and validated DataFrame.
+        A pandas DataFrame of the validated data.
 
     Raises:
+        FileNotFoundError: If the data file does not exist.
         ValueError: If data validation fails.
     """
-    if not os.path.exists(data_path):
-        raise FileNotFoundError(f"Raw data file not found at: {data_path}")
+    print(f"Loading data from {data_file_path}...")
+    if not data_file_path.exists():
+        raise FileNotFoundError(f"Data file not found at: {data_file_path}")
 
-    print(f"Loading data from {data_path}...")
-    # Directly load with pandas for initial dataframe, then pass to GX validator
-    df = pd.read_csv(data_path)
-    print(f"Data loaded successfully. Shape: {df.shape}")
+    # Load the data into a pandas DataFrame
+    df = pd.read_csv(data_file_path)
 
-    print(f"Validating data against Expectation Suite: '{suite_name}'...")
-    try:
-        context = gx.get_context()
-        
-        # Get the data asset and build a batch request
-        datasource = context.get_datasource(DATASOURCE_NAME)
-        data_asset = datasource.get_asset(DATA_ASSET_NAME)
-        batch_request = data_asset.build_batch_request(options={"path": data_path})
+    # Get the Great Expectations context and validator
+    context = gx.get_context()
+    validator = context.get_validator(
+        batch_definition_name=gx_data_asset_name,
+        batch_identifiers={"dataframe": df},
+        expectation_suite_name=gx_suite_name,
+        datasource_name=gx_datasource_name,
+    )
 
-        # Get a validator for the batch and suite
-        validator = context.get_validator(
-            batch_request=batch_request,
-            expectation_suite_name=suite_name
-        )
+    # Validate the data
+    print("Running Great Expectations data validation...")
+    validation_result = validator.validate()
 
-        # Validate the data
-        validation_result = validator.validate() # No need to pass suite_name again if already in get_validator
-
-        if not validation_result.success:
-            print("Data validation failed!")
-            # Build and open Data Docs for detailed report
-            context.build_data_docs()
-            context.open_data_docs() # This will open the browser
-            raise ValueError("Raw data failed Great Expectations validation. Check Data Docs for details.")
-        else:
-            print("Data validation successful!")
-            return df
-
-    except Exception as e:
-        print(f"An error occurred during data validation: {e}")
-        raise
+    if not validation_result.success:
+        print("Data validation failed! ❌")
+        # Build and open the data docs to see the report
+        context.open_data_docs()
+        raise ValueError("Data validation failed. Check Data Docs for details.")
+    
+    print("Data validation successful! ✅")
+    return df
 
 if __name__ == "__main__":
-    # Example usage:
-    # First, ensure you have run the manual GX setup and `scripts/create_expectation_suite.py`
+    # In a real pipeline, these values would come from a configuration file
+    # For this example, we'll hardcode them to demonstrate the script
+    config_file = pathlib.Path(__file__).resolve().parent.parent / "configs" / "config.yaml"
+    if not config_file.exists():
+        print(f"Error: {config_file} not found. Please create the config file.")
+        sys.exit(1)
+
+    import yaml
+    with open(config_file) as f:
+        config = yaml.safe_load(f)
+
+    raw_data_path = pathlib.Path(__file__).resolve().parent.parent / config['data_paths']['raw_data_path']
+
     try:
-        validated_df = load_and_validate_data()
+        validated_df = load_data(
+            data_file_path=raw_data_path,
+            gx_suite_name=config['great_expectations']['suite_name'],
+            gx_datasource_name=config['great_expectations']['datasource_name'],
+            gx_data_asset_name=config['great_expectations']['data_asset_name'],
+        )
         print("\nValidated DataFrame head:")
         print(validated_df.head())
-    except ValueError as e:
-        print(f"Pipeline halted due to: {e}")
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
+    except (FileNotFoundError, ValueError) as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
+
